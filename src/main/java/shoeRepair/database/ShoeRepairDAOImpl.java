@@ -2,48 +2,47 @@ package shoeRepair.database;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import shoeRepair.Client;
+import shoeRepair.ShoeRepair;
 import shoeRepair.database.hibernate.HiberUtil;
 import java.util.List;
 
-public class ClientDAOImpl implements ClientDAO {
 
+public class ShoeRepairDAOImpl implements ShoeRepairDAO{
     @Override
-    public List<Client> getAllClient() {
+    public List<ShoeRepair> getAllInfoShoeRepairClient() {
         SessionFactory factory = HiberUtil.getSessionFactory();
         Session session = factory.openSession();
         session.beginTransaction();
-        List<Client> clients = session
-                .createQuery("FROM Client")
+        List<ShoeRepair> shoeRepair = session
+                .createQuery("FROM ShoeRepair")
                 .getResultList();
         session.getTransaction().commit();
         factory.close();
-        return  clients;
+        return  shoeRepair;
     }
 
     @Override
-    public Client getClientById(int id) {
-        Client client = null;
+    public ShoeRepair getShoeRepairClientById(int id) {
+        ShoeRepair shoeRepair = null;
         SessionFactory factory = HiberUtil.getSessionFactory();
         Session session = factory.openSession();
         try {
             session.beginTransaction();
-            client =session.get(Client.class, id);
+            shoeRepair =session.get(ShoeRepair.class, id);
             session.getTransaction().commit();
         } catch (Exception e) {
             factory.close();
         }
-        return client;
+        return shoeRepair;
     }
 
     @Override
-    public void save(Client client) {
+    public void save(ShoeRepair shoeRepair) {
         SessionFactory factory = HiberUtil.getSessionFactory();
         Session session = factory.openSession();
         session.beginTransaction();
-        session.save(client);
+        session.save(shoeRepair);
         session.getTransaction().commit();
         factory.close();
     }
 }
-

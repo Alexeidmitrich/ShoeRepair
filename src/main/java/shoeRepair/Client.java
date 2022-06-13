@@ -1,31 +1,32 @@
 package shoeRepair;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
 public class Client {
-    protected int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected int idClient;
     protected String firstName;
     protected String lastName;
     protected String phone;
-    protected String description;
 
-    public Client(int id, String firstName, String lastName, String phone, String description) {
-        this.id = id;
+    @OneToMany(mappedBy = "client")
+    protected List<Order> orders;
+    public Client(int idClient,String firstName, String lastName, String phone) {
+        this.idClient = idClient;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
-        this.description = description;
     }
-
-    public Client(String firstName, String lastName, String phone, String description) {
+    public Client(String firstName, String lastName, String phone){
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
-        this.description = description;
-    }
+}
 
-    public int getId() {
-        return id;
-    }
-
+public Client(){}
     public String getFirstName() {
         return firstName;
     }
@@ -38,10 +39,11 @@ public class Client {
         return phone;
     }
 
-    public String getDescription() {
-        return description;
+    public int getIdClient() {
+        return idClient;
     }
+
     public void printInformation(){
-        System.out.println(getId() + " " + getFirstName() + " " + getLastName() + " " + getPhone() + " " + getDescription());
+        System.out.println(getIdClient() + " " + getFirstName() + " " + getLastName() + " " + getPhone());
     }
 }

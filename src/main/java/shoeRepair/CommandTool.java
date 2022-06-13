@@ -1,26 +1,50 @@
 package shoeRepair;
 
-import java.sql.Date;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CommandTool {
-    private ShoeRepairRefactirung shoeRepairRefactirung;
+    private ShoeRepairSystem shoeRepairRefactirung;
 
     public CommandTool(){
-        shoeRepairRefactirung = new ShoeRepairRefactirung();
+        shoeRepairRefactirung = new ShoeRepairSystem();
     }
 
     public  void parseCommand(String command){
-      final String addClient = "(addclient) ([a-zA-Z\\sа-яА-Я\\- W$0-9]+;[a-zA-Z\\sа-яА-Я\\- W$0-9]+;[a-zA-Z\\sа-яА-Я\\- W$0-9]+;[a-zA-Z\\sа-яА-Я\\- W$0-9]+)";
-      Matcher matcher = isPatternMatches(command, addClient);
+      final String addShoeRepairInfo = "(addshoerepairinfo) ([a-zA-Z\\sа-яА-Я\\- W$0-9]+;[a-zA-Z\\sа-яА-Я\\- W$0-9]+;[a-zA-Z\\sа-яА-Я\\- W$0-9+]+;[a-zA-Z\\sа-яА-Я\\- W$0-9]+)";
+      final String addClient = "(addclient) ([a-zA-Z\\sа-яА-Я\\- W$0-9]+;[a-zA-Z\\sа-яА-Я\\- W$0-9]+;[a-zA-Z\\sа-яА-Я\\- W$0-9+]+)";
+      final String printClientById = "(printclient) ([0-9]+)";
+      final String printAllClient = "(printallclient)";
+      Matcher matcher = isPatternMatches(command, addShoeRepairInfo);
+        if (matcher.find()) {
+            String data = matcher.group(2);
+            System.out.println(data);
+            String[] shoerepairInfoData = data.split(";");
+            shoeRepairRefactirung.addShoeRepairInfo(shoerepairInfoData[0], shoerepairInfoData[1], shoerepairInfoData[2], shoerepairInfoData[3]);
+            System.out.println("Ok");
+        }
+        matcher = isPatternMatches(command, addClient);
         if (matcher.find()) {
             String data = matcher.group(2);
             System.out.println(data);
             String[] clientData = data.split(";");
-            shoeRepairRefactirung.addClient(clientData[0], clientData[1], clientData[2],clientData[3]);
+            shoeRepairRefactirung.addClient(clientData[0], clientData[1], clientData[2]);
             System.out.println("Ok");
+        }
+        matcher = isPatternMatches(command, printClientById);
+        if(matcher.find()){
+            String data = matcher.group(2);
+            String [] clientIdData = data.split(";");
+            System.out.println(data);
+            int id = Integer.parseInt(clientIdData[0]);
+            shoeRepairRefactirung.printClientById(id);
+            System.out.println("Ok");
+        }
+        matcher = isPatternMatches(command, printAllClient);
+        if(matcher.find()) {
+            shoeRepairRefactirung.printAllClientByOrder();
+            System.out.println("OK");
         }
     }
     public Matcher isPatternMatches(String command, String regex){

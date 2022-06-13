@@ -1,0 +1,3 @@
+addclient Ivan;Gorshkov;+79215702317
+addshoerepairinfo Ivan;Gorshkov;+79215702317;Замена каблука
+printclient 1
