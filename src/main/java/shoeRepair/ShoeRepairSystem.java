@@ -7,8 +7,7 @@ import java.util.List;
 public class ShoeRepairSystem {
     private ClientDAO clientDAO = new ClientDAOImpl();
     private ShoeRepairDAO shoeRepairDAO = new ShoeRepairDAOImpl();
-    private ShoeRepairDAOImpl shoeRepairDAOImpl;
-    private ClientDAOImpl clientDAOImpl;
+    private OrderDAO orderDAO = new OrderDAOImpl();
 
     public void addShoeRepairInfo(String firstName, String lastName, String phone, String description){
         ShoeRepair shoeRepair = new ShoeRepair(firstName, lastName, phone, description);
@@ -17,6 +16,10 @@ public class ShoeRepairSystem {
     public void addClient(String firstName, String lastName, String phone){
         Client client = new Client(firstName, lastName, phone);
         clientDAO.save(client);
+    }
+    public void addOrder(String title, String description, int id_Client){
+        Order order = new Order(title, description,id_Client);
+        orderDAO.save(order);
     }
     public void printClientById(int id){
         ShoeRepairDAOImpl shoeRepairDAOImpl = new ShoeRepairDAOImpl();

@@ -1,33 +1,50 @@
 package shoeRepair.database;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import shoeRepair.Client;
 import shoeRepair.Order;
-import shoeRepair.database.hibernate.HiberUtil;
-
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.List;
 
 public class OrderDAOImpl implements  OrderDAO{
+    private static final String PERSISTENCE_UNIT_NAME = "todos";
+    private EntityManagerFactory factory;
+
     @Override
     public void save(Order order) {
-        SessionFactory factory = HiberUtil.getSessionFactory();
-        Session session = factory.openSession();
-        session.beginTransaction();
-        session.save(order);
-        session.getTransaction().commit();
+        factory = Persistence.createEntityManagerFactory("todos");
+        EntityManager em = factory.createEntityManager();
+        em.getTransaction().begin();
+        em.persist(order);
+        em.getTransaction().commit();
+        em.close();
         factory.close();
     }
 
     @Override
-    public List<Order> getOrders() {
-        return null;
+    public Order getOrderById(int id) {
+        Order order = null;
+        factory = Persistence.createEntityManagerFactory("todos");
+        EntityManager em = factory.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            order =em.find(Order.class, id);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            factory.close();
+        }
+        return order;
     }
 
-    public static void main(String[] args) {
-        Client client = new Client("A", "B","33-33-33");
-        new ClientDAOImpl().save(client);
-        Order order = new Order( "Fake Order", "Fake description", client);
-        new OrderDAOImpl().save(order);
-    }
+    @Override
+    public List<Order> getOrders() {
+    factory = Persistence.createEntityManagerFactory("todos");
+           EntityManager em = factory.createEntityManager();
+           List<Order> list = em.createQuery("SELECT c FROM Order o").getResultList();
+        for(int i = 0; i < list.size(); i++) {
+        Order o = list.get(i);
+        System.out.println(o);
+        }
+        return list;
+        }
 }

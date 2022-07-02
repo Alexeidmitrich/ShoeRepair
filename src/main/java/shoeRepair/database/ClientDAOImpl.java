@@ -1,35 +1,36 @@
 package shoeRepair.database;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import shoeRepair.Client;
-import shoeRepair.database.hibernate.HiberUtil;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.List;
 
 public class ClientDAOImpl implements ClientDAO {
+    private static final String PERSISTENCE_UNIT_NAME = "todos";
+    private static EntityManagerFactory factory;
 
     @Override
     public List<Client> getAllClient() {
-        SessionFactory factory = HiberUtil.getSessionFactory();
-        Session session = factory.openSession();
-        session.beginTransaction();
-        List<Client> clients = session
-                .createQuery("FROM Client")
-                .getResultList();
-        session.getTransaction().commit();
-        factory.close();
-        return  clients;
+        factory = Persistence.createEntityManagerFactory("todos");
+        EntityManager em = factory.createEntityManager();
+        List<Client> list = em.createQuery("SELECT c FROM Client c").getResultList();
+        for(int i = 0; i < list.size(); i++) {
+            Client c = list.get(i);
+            System.out.println(c);
+        }
+        return list;
     }
 
     @Override
     public Client getClientById(int id) {
         Client client = null;
-        SessionFactory factory = HiberUtil.getSessionFactory();
-        Session session = factory.openSession();
+        factory = Persistence.createEntityManagerFactory("todos");
+        EntityManager em = factory.createEntityManager();
         try {
-            session.beginTransaction();
-            client =session.get(Client.class, id);
-            session.getTransaction().commit();
+            em.getTransaction().begin();
+            client =em.find(Client.class, id);
+            em.getTransaction().commit();
         } catch (Exception e) {
             factory.close();
         }
@@ -38,11 +39,12 @@ public class ClientDAOImpl implements ClientDAO {
 
     @Override
     public void save(Client client) {
-        SessionFactory factory = HiberUtil.getSessionFactory();
-        Session session = factory.openSession();
-        session.beginTransaction();
-        session.save(client);
-        session.getTransaction().commit();
+        factory = Persistence.createEntityManagerFactory("todos");
+        EntityManager em = factory.createEntityManager();
+        em.getTransaction().begin();
+        em.persist(client);
+        em.getTransaction().commit();
+        em.close();
         factory.close();
     }
 }

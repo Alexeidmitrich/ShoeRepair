@@ -1,35 +1,37 @@
 package shoeRepair.database;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import shoeRepair.ShoeRepair;
-import shoeRepair.database.hibernate.HiberUtil;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.util.List;
 
 
 public class ShoeRepairDAOImpl implements ShoeRepairDAO{
+    private static final String PERSISTENCE_UNIT_NAME = "todos";
+    private EntityManagerFactory factory;
+
     @Override
     public List<ShoeRepair> getAllInfoShoeRepairClient() {
-        SessionFactory factory = HiberUtil.getSessionFactory();
-        Session session = factory.openSession();
-        session.beginTransaction();
-        List<ShoeRepair> shoeRepair = session
-                .createQuery("FROM ShoeRepair")
-                .getResultList();
-        session.getTransaction().commit();
-        factory.close();
-        return  shoeRepair;
+        factory = Persistence.createEntityManagerFactory("todos");
+        EntityManager em = factory.createEntityManager();
+        List<ShoeRepair> list = em.createQuery("SELECT c FROM ShoeRepair s").getResultList();
+        for(int i = 0; i < list.size(); i++) {
+            ShoeRepair s = list.get(i);
+            System.out.println(s);
+        }
+        return list;
     }
 
     @Override
     public ShoeRepair getShoeRepairClientById(int id) {
         ShoeRepair shoeRepair = null;
-        SessionFactory factory = HiberUtil.getSessionFactory();
-        Session session = factory.openSession();
+        factory = Persistence.createEntityManagerFactory("todos");
+        EntityManager em = factory.createEntityManager();
         try {
-            session.beginTransaction();
-            shoeRepair =session.get(ShoeRepair.class, id);
-            session.getTransaction().commit();
+            em.getTransaction().begin();
+            shoeRepair =em.find(ShoeRepair.class, id);
+            em.getTransaction().commit();
         } catch (Exception e) {
             factory.close();
         }
@@ -38,11 +40,12 @@ public class ShoeRepairDAOImpl implements ShoeRepairDAO{
 
     @Override
     public void save(ShoeRepair shoeRepair) {
-        SessionFactory factory = HiberUtil.getSessionFactory();
-        Session session = factory.openSession();
-        session.beginTransaction();
-        session.save(shoeRepair);
-        session.getTransaction().commit();
+        factory = Persistence.createEntityManagerFactory("todos");
+        EntityManager em = factory.createEntityManager();
+        em.getTransaction().begin();
+        em.persist(shoeRepair);
+        em.getTransaction().commit();
+        em.close();
         factory.close();
     }
 }

@@ -1,21 +1,27 @@
 package shoeRepair;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Table(name = "client")
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected int idClient;
+    protected int id;
+    @Column(nullable = false, length = 45)
     protected String firstName;
+    @Column(nullable = false, length = 45)
     protected String lastName;
+    @Column(nullable = false, length = 14)
     protected String phone;
 
-    @OneToMany(mappedBy = "client")
-    protected List<Order> orders;
-    public Client(int idClient,String firstName, String lastName, String phone) {
-        this.idClient = idClient;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "client", targetEntity = Order.class)
+    protected Set<Order> orders;
+
+    public Client(int id,String firstName, String lastName, String phone) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -24,7 +30,8 @@ public class Client {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
-}
+    }
+
 
 public Client(){}
     public String getFirstName() {
@@ -39,11 +46,22 @@ public Client(){}
         return phone;
     }
 
-    public int getIdClient() {
-        return idClient;
+    public int getId() {
+        return id;
     }
 
     public void printInformation(){
-        System.out.println(getIdClient() + " " + getFirstName() + " " + getLastName() + " " + getPhone());
+        System.out.println(getId() + " " + getFirstName() + " " + getLastName() + " " + getPhone());
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
     }
 }
+

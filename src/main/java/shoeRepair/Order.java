@@ -1,33 +1,43 @@
 package shoeRepair;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
+@Table(name = "orders")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(nullable = false, length = 55)
     private String  title;
+    @Column(nullable = false, length = 55)
     private String description;
-   @ManyToOne
-   @JoinColumn(name="client_id")
+    @Column(name = "idClient",nullable = false, length = 15)
+    private int id_Client;
+
+    @ManyToOne(targetEntity = Client.class)
+    @JoinColumn(name = "idClient")
     private Client client;
 
     public Order() {
     }
 
-    public Order(int id, String title, String description, Client client) {
+    public Order(int id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.client = client;
     }
 
-    public Order(String title, String description, Client client) {
+    public Order(String title, String description, int id_Client) {
         this.title = title;
         this.description = description;
-        this.client = client;
+        this.id_Client = id_Client;
     }
 
     public int getId() {
@@ -42,9 +52,6 @@ public class Order {
         return description;
     }
 
-    public Client getClient() {
-        return client;
-    }
 
     public void setId(int id) {
         this.id = id;
@@ -58,7 +65,4 @@ public class Order {
         this.description = description;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
-    }
 }

@@ -1,8 +1,10 @@
 package shoeRepair;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
+@XmlRootElement
 public class ShoeRepair {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,5 +47,16 @@ public class ShoeRepair {
     }
     public void printInformationShoeRepair(){
         System.out.println(getId() + " " + getFirstName() + " " + getLastName() + " " + getPhone() + " " + getDescription());
+    }
+
+    @Override
+    public String toString() {
+        return "ShoeRepair{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
