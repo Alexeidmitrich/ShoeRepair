@@ -33,4 +33,8 @@ public class ShoeRepairSystem {
           shoeRepair.printInformationShoeRepair();
         }
     }
+    public static void main(String[] args) {
+        ShoeRepairSystem shoeRepair = new ShoeRepairSystem();
+        shoeRepair.addClient("dggaag", "vvxcvd", "ghfddh");
+    }
 }

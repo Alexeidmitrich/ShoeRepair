@@ -5,10 +5,11 @@
              version="2.0">
     <persistence-unit name="todos">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>"shoerepair"</class>
-        <class>"Client"</class>
+        <class>"shoerepair.model.Shoprepier"</class>
+        <class>"shoerepair.model.Client"</class>
+        <class>"shoerepair.model.Order"</class>
         <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
             <property name="javax.persistence.jdbc.url" value = "jdbc:mysql://localhost:3306/shoerepair"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.user" value="root"/>

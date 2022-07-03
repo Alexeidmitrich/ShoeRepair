@@ -1,6 +1,10 @@
 package shoeRepair.database;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import shoeRepair.Client;
+import shoeRepair.database.hibernate.HiberUtil;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -39,12 +43,19 @@ public class ClientDAOImpl implements ClientDAO {
 
     @Override
     public void save(Client client) {
-        factory = Persistence.createEntityManagerFactory("todos");
+        /*factory = Persistence.createEntityManagerFactory("todos");
         EntityManager em = factory.createEntityManager();
         em.getTransaction().begin();
         em.persist(client);
         em.getTransaction().commit();
         em.close();
+        factory.close();
+    }*/
+        SessionFactory factory = HiberUtil.getSessionFactory();
+        Session session = factory.openSession();
+        session.beginTransaction();
+        session.save(client);
+        session.getTransaction().commit();
         factory.close();
     }
 }

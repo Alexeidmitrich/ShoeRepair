@@ -18,7 +18,7 @@ public class Order {
     private String  title;
     @Column(nullable = false, length = 55)
     private String description;
-    @Column(name = "idClient",nullable = false, length = 15)
+    @Transient
     private int id_Client;
 
     @ManyToOne(targetEntity = Client.class)
@@ -61,8 +61,17 @@ public class Order {
         this.title = title;
     }
 
+    public int getId_Client() {
+        return id_Client;
+    }
+
+    public void setId_Client(int id_Client) {
+        this.id_Client = id_Client;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
 
 }
