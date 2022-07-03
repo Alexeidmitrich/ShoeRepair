@@ -15,7 +15,7 @@ public class OrderDAOImpl implements  OrderDAO{
         factory = Persistence.createEntityManagerFactory("todos");
         EntityManager em = factory.createEntityManager();
         em.getTransaction().begin();
-        em.persist(order);
+        em.merge(order);
         em.getTransaction().commit();
         em.close();
         factory.close();
@@ -40,10 +40,9 @@ public class OrderDAOImpl implements  OrderDAO{
     public List<Order> getOrders() {
     factory = Persistence.createEntityManagerFactory("todos");
            EntityManager em = factory.createEntityManager();
-           List<Order> list = em.createQuery("SELECT c FROM Order o").getResultList();
+           List<Order> list = em.createQuery("SELECT o FROM Order o").getResultList();
         for(int i = 0; i < list.size(); i++) {
         Order o = list.get(i);
-        System.out.println(o);
         }
         return list;
         }

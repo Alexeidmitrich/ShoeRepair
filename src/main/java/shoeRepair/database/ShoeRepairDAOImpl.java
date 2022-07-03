@@ -15,10 +15,9 @@ public class ShoeRepairDAOImpl implements ShoeRepairDAO{
     public List<ShoeRepair> getAllInfoShoeRepairClient() {
         factory = Persistence.createEntityManagerFactory("todos");
         EntityManager em = factory.createEntityManager();
-        List<ShoeRepair> list = em.createQuery("SELECT c FROM ShoeRepair s").getResultList();
+        List<ShoeRepair> list = em.createQuery("SELECT s FROM ShoeRepair s").getResultList();
         for(int i = 0; i < list.size(); i++) {
             ShoeRepair s = list.get(i);
-            System.out.println(s);
         }
         return list;
     }

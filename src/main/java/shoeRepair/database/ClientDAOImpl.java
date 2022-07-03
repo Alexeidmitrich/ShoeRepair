@@ -21,7 +21,6 @@ public class ClientDAOImpl implements ClientDAO {
         List<Client> list = em.createQuery("SELECT c FROM Client c").getResultList();
         for(int i = 0; i < list.size(); i++) {
             Client c = list.get(i);
-            System.out.println(c);
         }
         return list;
     }
@@ -43,19 +42,12 @@ public class ClientDAOImpl implements ClientDAO {
 
     @Override
     public void save(Client client) {
-        /*factory = Persistence.createEntityManagerFactory("todos");
+        factory = Persistence.createEntityManagerFactory("todos");
         EntityManager em = factory.createEntityManager();
         em.getTransaction().begin();
         em.persist(client);
         em.getTransaction().commit();
         em.close();
-        factory.close();
-    }*/
-        SessionFactory factory = HiberUtil.getSessionFactory();
-        Session session = factory.openSession();
-        session.beginTransaction();
-        session.save(client);
-        session.getTransaction().commit();
         factory.close();
     }
 }

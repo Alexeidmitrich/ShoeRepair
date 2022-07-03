@@ -2,5 +2,4 @@ addclient Ivan;Gorshkov;+79215702317
 addshoerepairinfo Ivan;Gorshkov;+79215702317;Замена каблука
 printclient 1
 addorder Ремонт;Замена каблука;1
-fetch = FetchType.LAZY, mappedBy = "clients"
-, nullable = false
+printallclient
